@@ -20,8 +20,8 @@ app.use(express.static(path.join(__dirname, 'assets')));
 //     console.log("connection successful");
 // });
 
-// const dba = 'mongodb://yatash:yatash1@ds113169.mlab.com:13169/scvanger';
-const dba='mongodb://localhost/BBM'
+const dba = 'mongodb://yatash:yatash1@ds113169.mlab.com:13169/scvanger';
+// const dba='mongodb://localhost/BBM'
 mongoose.connect(dba,{ useNewUrlParser: true },function(error){
     if(error) console.log(error);
     console.log("connection successful");
