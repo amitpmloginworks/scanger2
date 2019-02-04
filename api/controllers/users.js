@@ -126,7 +126,7 @@ exports.reset_password = (req, res, next) => {
 
         // create expiration date
         var content_body1 = '<p>We heard that you lost your Scavanger password. Sorry about that! But don’t worry! You can use the following link to reset your password:</p>';
-        var content_body2  = '<p>If you don’t use this link within 3 hours, it will expire. To get a new password reset link, visit <a href="http://localhost:3000/password_reset?key='+token+'&id='+result._id+'">http://localhost:3000/password_reset</a></p><p>Thanks</p><p>Your friends at Scavanger</p>';
+        var content_body2  = '<p>If you don’t use this link within 3 hours, it will expire. To get a new password reset link, visit <a href="https://scvanger2app.herokuapp.com/password_reset?key='+token+'&id='+result._id+'">https://scvanger2app.herokuapp.com/password_reset</a></p><p>Thanks</p><p>Your friends at Scavanger</p>';
         content_body = content_body1 + content_body2;
         var mailOptions = {
             from: 'scavanger@gmail.com',
