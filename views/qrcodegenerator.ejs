@@ -1,0 +1,219 @@
+<% include partials/header %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <% include partials/sidebar %>
+        <div class="main-content">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header">Add Details</div>
+                                <div class="card-body">
+                                    <!-- <div class="card-title">
+                                        <h3 class="text-center title-2">Form </h3>
+                                    </div> -->
+                                    <!-- <form action='/api/images' method="post" enctype="multipart/form-data">
+                                        <input type='file' name='image' />
+                                        <button type="submit">upload</button>
+                                      </form> -->
+                                   
+                                       
+                                    <form action="/insert_qrcode" method="post" id="form_data" enctype="multipart/form-data">
+                                        <input type='file' name='image' onchange="readURL(this);"/>
+                                        <img id="blah" src="<%= data.ImageUrl %>" alt="your image" /> 
+                                        <!-- <input type='file' onchange="readURL(this);" />
+                                        <img id="blah" src="http://placehold.it/180" alt="your image" />  -->
+                                        
+                                        <!-- <input type="file" name="imgUploader"   multiple /> -->
+                                       
+                                        <!-- <img src="http://placehold.it/180" height="200" alt="Image preview..."> -->
+                                        <div class="form-group">
+                                            <label for="text" class="control-label mb-1">Name</label>
+                                            <input  name="name" type="text" class="form-control" aria-required="true" aria-invalid="false" id="name" autocomplete="off" <% if(typeof data != 'undefined') { %> value="<%= data.name %>"<% } %>>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="text" class="control-label mb-1">Location  </label>
+                                            <input autocomplete="off"  name="location" type="text" class="form-control" aria-required="true" aria-invalid="false" id="mailing_address" placeholder="Enter your address" <% if(typeof data != 'undefined') { %> value="<%= data.location %>"<% } %>>
+                                        </div>
+                                         <div class="form-group">
+                                            <label for="text" class="control-label mb-1">Type  </label>
+                                            <input   name="PlaceType" type="text" class="form-control" aria-required="true" aria-invalid="false" id="PlaceType" placeholder="Enter your Type" <% if(typeof data != 'undefined') { %> value="<%= data.PlaceType %>"<% } %>>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="text"  class="control-label mb-1">Points</label>
+                                            <input  name="points" autocomplete="off" type="number" class="form-control" aria-required="true" aria-invalid="false" id="points" onkeypress="return isNumber(event)" <% if(typeof data != 'undefined') { %> value="<%= data.points %>"<% } %>>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="text" class="control-label mb-1">QR Code</label>
+                                            <input autocomplete="off"  disabled="disabled"  type="text" class="form-control" aria-required="true" aria-invalid="false" id="qr-url" <% if(typeof data != 'undefined') { %> value="<%= data.qrcode %>"<% } %>>
+                                            <input  name="qr_code" type="hidden" class="form-control" aria-required="true" aria-invalid="false" id="qr-url_val" <% if(typeof data != 'undefined') { %> value="<%= data.qrcode %>"<% } %>>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="button" value="Generate QRCode" id="gn-btn" class="btn btn-primary btn-sm">
+                                        </div>
+                                        <div id="qrcode" style="margin-bottom: 3%;"></div>
+                                        <% if(typeof data != "undefined") { %>
+                                        <input  name="update_id" value="<%= data._id  %>" type="hidden" class="form-control">
+                                        <% } %>
+                                        <div>
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                <i class="fa fa-dot-circle-o"></i> Submit
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+ 
+</body>
+   
+
+<% include partials/footer %>
+<script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
+<script>
+     function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+function isNumber(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+$('#gn-btn').on('click', function(){
+    $valid_value = check_validation();
+    if($valid_value == 1){
+        // Clear Previous QR Code
+        $('#qrcode').html('');
+        // Set Size to Match User Input
+        $('#qrcode').css({
+        'width' :  128,
+        'height' : 128
+        });
+    // Generate and Output QR Code
+    $qr_value =  Math.floor(Math.random()*90000) + 10000;
+    $('#qrcode').qrcode({width: 128,height: 128,text: $qr_value});
+    $('#qr-url').val($qr_value);
+    $('#qr-url_val').val($qr_value);
+    }
+});
+$('#form_data').submit(function(){
+    $valid_value = check_validation();
+    if(($valid_value == 1) && $('#qr-url').val() != ''){
+        return true;
+    }else{
+    $('#qr-url').addClass('error-form');
+    return false;
+    }
+});
+function check_validation(){
+    $flag = 1;
+    $name = $('#name').val();
+    $location = $('#mailing_address').val();
+    $points = $('#points').val();
+    if($name == ''){
+        $flag = 0;
+        $('#name').addClass('error-form');
+    }else{
+        $('#name').removeClass('error-form');
+    }
+    if($location == ''){
+        $flag = 0;
+        $('#mailing_address').addClass('error-form');
+    }else{
+        $('#mailing_address').removeClass('error-form');
+    }
+    if($points == ''){
+        $flag = 0;
+        $('#points').addClass('error-form');
+    }else{
+        $('#points').removeClass('error-form');
+    }
+    return  $flag;
+}
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtnZ8LRWDzIpzyBe5Kuj8taIfu4Qb__6s&libraries=places&callback=initAutocomplete" async defer></script>
+<script>
+      function initAutocomplete() {
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('mailing_address');
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+          });
+          map.fitBounds(bounds);
+        });
+      }
+</script>
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
+    <!-- <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script> -->
