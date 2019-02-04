@@ -48,7 +48,7 @@ exports.loginRedirect = (req,res,next) => {
         "content-type": "application/json",  
     },
     // "url": "https://secure-escarpment-31573.herokuapp.com/user/login",
-    "url":"http://localhost:3000/user/login",
+    "url":"https://scvanger2app.herokuapp.com/user/login",
     "body": JSON.stringify({
             "email" : email,
             "password" : password
