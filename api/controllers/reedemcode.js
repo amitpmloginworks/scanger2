@@ -14,6 +14,7 @@ const Qrcode = require('../../models/qrcodegenerator');
 
 
 // })
+  var id = req.body.listplaces;
 var query = {_id:id};
 var update = {
     status: 0
