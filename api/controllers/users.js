@@ -140,7 +140,7 @@ exports.reset_password = (req, res, next) => {
           };
           transporter.sendMail(mailOptions, function(error, info){
             if (error) {
-              //console.log(error);
+              console.log(error);
             } else {
                 var curr_date = new Date();
                 var update = {
@@ -150,7 +150,7 @@ exports.reset_password = (req, res, next) => {
                 var query = {_id:result._id};
                 User.findOneAndUpdate(query,update)
                 .exec();
-              //console.log('Email sent: ' + info.response);
+              console.log('Email sent: ' + info.response);
               return res.status(200).json({
                 message:'Mail Sent Successfully'
             });
