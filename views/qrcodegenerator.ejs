@@ -6,9 +6,12 @@
             <div class="section__content section__content--p30">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">Add Details</div>
+                        <div class="col-lg-6" style=" flex: 0 0 100%; 
+                         max-width: 100%;">
+                            <div class="card" style="    box-shadow: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2);
+                        ">
+                                <div style="    font-size: 20px;
+                                font-family: inherit;" class="card-header">Add Detail</div>
                                 <div class="card-body">
                                     <!-- <div class="card-title">
                                         <h3 class="text-center title-2">Form </h3>
@@ -19,15 +22,50 @@
                                       </form> -->
                                    
                                        
-                                    <form action="/insert_qrcode" method="post" id="form_data" enctype="multipart/form-data">
-                                        <input type='file' name='image' onchange="readURL(this);"/>
-                                        <img id="blah" src="<%= data.ImageUrl %>" alt="your image" /> 
+                                    <form style="max-width: 50%;"  action="/insert_qrcode" method="post" id="form_data" enctype="multipart/form-data">
+                                      
+                                        <!-- <img id="blah" src="http://placehold.it/180" alt="your image" /> -->
+                                         
+                                        <!-- <% if(typeof data == "undefined") { %> -->
+                                      
+                                        <!-- <% } %> -->
                                         <!-- <input type='file' onchange="readURL(this);" />
                                         <img id="blah" src="http://placehold.it/180" alt="your image" />  -->
                                         
                                         <!-- <input type="file" name="imgUploader"   multiple /> -->
                                        
                                         <!-- <img src="http://placehold.it/180" height="200" alt="Image preview..."> -->
+                                        <div class="form-group">
+                                            <input class="form-control" aria-required="true" aria-invalid="false" id="image"  type='file' name='image' onchange="readURL(this);" />
+                                            <p style="
+                                            text-align: center;
+                                            
+                                            width: 100%;
+                                            font-size: 19px;
+                                            font-weight: 500;
+                                            font-family: inherit;
+                                           
+                                            position: absolute;
+                                            top: 13px;
+                                            right: -230px;
+                                                
+                                            ">Your Image Will Appear Here</p>
+                                            <div  style="    height: 48%;
+                                        background-color:#f1f0f0;
+                                        z-index: 1000;
+                                        position: absolute;
+                                        right: 21px;
+                                        top: 71px;
+                                        width: 43%;
+                                        padding: 11px;  box-shadow: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2);" >
+                                        
+                                            <img style="position: relative;
+                                         
+                                            
+                                            height:-webkit-fill-available;" id="blah" src="<%= data.ImageUrl %>"  />
+                                          </div>  
+                                        
+                                        </div>
                                         <div class="form-group">
                                             <label for="text" class="control-label mb-1">Name</label>
                                             <input  name="name" type="text" class="form-control" aria-required="true" aria-invalid="false" id="name" autocomplete="off" <% if(typeof data != 'undefined') { %> value="<%= data.name %>"<% } %>>
@@ -44,20 +82,29 @@
                                             <label for="text"  class="control-label mb-1">Points</label>
                                             <input  name="points" autocomplete="off" type="number" class="form-control" aria-required="true" aria-invalid="false" id="points" onkeypress="return isNumber(event)" <% if(typeof data != 'undefined') { %> value="<%= data.points %>"<% } %>>
                                         </div>
+                                       
                                         <div class="form-group">
                                             <label for="text" class="control-label mb-1">QR Code</label>
                                             <input autocomplete="off"  disabled="disabled"  type="text" class="form-control" aria-required="true" aria-invalid="false" id="qr-url" <% if(typeof data != 'undefined') { %> value="<%= data.qrcode %>"<% } %>>
                                             <input  name="qr_code" type="hidden" class="form-control" aria-required="true" aria-invalid="false" id="qr-url_val" <% if(typeof data != 'undefined') { %> value="<%= data.qrcode %>"<% } %>>
                                         </div>
                                         <div class="form-group">
-                                            <input type="button" value="Generate QRCode" id="gn-btn" class="btn btn-primary btn-sm">
+                                            <input style="width: 100%;
+                                            height: 45px;
+                                            box-shadow: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2);" type="button" value="Generate QRCode" id="gn-btn" class="btn btn-primary btn-sm">
                                         </div>
                                         <div id="qrcode" style="margin-bottom: 3%;"></div>
                                         <% if(typeof data != "undefined") { %>
                                         <input  name="update_id" value="<%= data._id  %>" type="hidden" class="form-control">
                                         <% } %>
                                         <div>
-                                            <button type="submit" class="btn btn-success btn-sm">
+                                            <button style="border-color: transparent;
+                                            width: 100%;
+                                            height: 50px;
+                                            /* box-shadow: 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12), 0 5px 5px -3px rgba(0,0,0,.2); */
+                                            color: #fff;
+                                            background-color: #00bcd4!important;
+                                            box-shadow: 0 4px 20px 0 rgba(0,0,0,.14), 0 7px 12px -5px rgba(0,188,212,.46);" type="submit" class="btn btn-success btn-sm">
                                                 <i class="fa fa-dot-circle-o"></i> Submit
                                             </button>
                                         </div>
@@ -125,6 +172,8 @@ function check_validation(){
     $name = $('#name').val();
     $location = $('#mailing_address').val();
     $points = $('#points').val();
+    $PlaceType=$('#PlaceType').val();
+    $image=$('#image').val();
     if($name == ''){
         $flag = 0;
         $('#name').addClass('error-form');
@@ -143,6 +192,20 @@ function check_validation(){
     }else{
         $('#points').removeClass('error-form');
     }
+    if($PlaceType == ''){
+        $flag = 0;
+        $('#PlaceType').addClass('error-form');
+    }else{
+        $('#PlaceType').removeClass('error-form');
+    }
+    if($image=='')
+    {
+        $flag = 0;
+        $('#image').addClass('error-form');
+    }else{
+        $('#image').removeClass('error-form');
+    }
+
     return  $flag;
 }
 

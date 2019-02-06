@@ -1,6 +1,7 @@
 const Reedemcard=require('../models/reedemcard');
 const getlatlngplace=require('../../models/qrcodegenerator')
 const mongoose=require('mongoose');
+const Qrcode = require('../../models/qrcodegenerator');
  exports.getreedempoints=(req,res,next)=>{
    //  req.body.listplaces
 
@@ -13,7 +14,14 @@ const mongoose=require('mongoose');
 
 
 // })
-
+var query = {_id:id};
+var update = {
+    status: 0
+}
+Qrcode.findOneAndUpdate(query,update)
+.exec()
+.then(result=>(result=>{
+})).catch(err=>console.log(err));
 
 
 const reedemcard=new Reedemcard({

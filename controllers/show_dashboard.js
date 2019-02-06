@@ -48,7 +48,8 @@ exports.loginRedirect = (req,res,next) => {
         "content-type": "application/json",  
     },
     // "url": "https://secure-escarpment-31573.herokuapp.com/user/login",
-    "url":"https://scvanger2app.herokuapp.com/user/login",
+     "url":"https://scvanger2app.herokuapp.com/user/login",
+   // "url":"http://localhost:3000/user/login",
     "body": JSON.stringify({
             "email" : email,
             "password" : password
@@ -62,7 +63,7 @@ exports.loginRedirect = (req,res,next) => {
     if(response.statusCode == 200 && data.message == "Auth Successful"){
       sess = req.session;
       sess.email= data.data.email;
-      res.redirect("/dashboard");
+      res.redirect("/qrcodegenerator");
     }else{
       const msg = "Failed Login";
       res.render("login", {msg:"Please Try Again"});
@@ -89,6 +90,7 @@ exports.dashboard = (req, res, next) => {
 // qrcodegenerator
 
 exports.qrcodegenerator = (req,res,next) => {
+
   sess = req.session;
   if(sess.email){
   const user_email = sess.email;
@@ -191,7 +193,8 @@ exports.insert_qrcode = (req,res,next) => {
   Qrcode.findOneAndUpdate(query,update)
   .exec()
   .then(result=>{
-    res.redirect('/qrcodegenerator?id='+id);
+    // res.redirect('/qrcodegenerator?id='+id);
+    res.redirect('/listqrcode');
   }).catch(err=>console.log(err));
   }else{
     console.log('req'+req.body.PlaceType)
@@ -206,7 +209,7 @@ exports.insert_qrcode = (req,res,next) => {
     });
     qrcodes.save().then(result=>{
       // res.render("qrcodegenerator",{layout:false,user_email: sess.email});
-      res.redirect('/qrcodegenerator');
+      res.redirect('/listqrcode');
     }).catch(err=>console.log(err));
     // res.redirect("qrcodegenerator",{user_email: sess.email});
   }
@@ -223,7 +226,7 @@ exports.password_reset = (req,res,next) => {
           
           timeDiff = Math.floor( (Date.parse(curr_date) - Date.parse(result.token_expire)) / (1000*60) % 60);
           if(timeDiff < 30){
-          res.render('password_reset');
+          res.render('password_reset',{msg: "Password Reset, Please Login in Mobile Application"});
           }else{
             res.render('password_reset',{user_msg: "Link Expire"});
           }
@@ -239,6 +242,7 @@ exports.password_reset = (req,res,next) => {
 }
 // Password Matching
 exports.password_match = (req,res,next) => {
+  console.log('enter')
   User.findOne({ _id: req.body.object_id , token_key: req.body.key })
   .exec()
   .then( result => {
@@ -253,7 +257,8 @@ exports.password_match = (req,res,next) => {
           User.findOneAndUpdate(query,update)
           .exec()
           .then(result=>{
-            res.render('login',{msg: "Password Reset, Please Login"});
+            console.log('password reset')
+            res.render('password_reset',{user_msg: "Password Reset, Please Login in Mobile Application"});
           }).catch(err=>console.log(err));
       }else{
         res.render('password_reset',{user_msg: "U can't be smart"});
