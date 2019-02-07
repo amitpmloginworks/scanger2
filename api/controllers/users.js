@@ -157,7 +157,7 @@ exports.reset_password = (req, res, next) => {
             }
           });
         }else{
-            return res.status(404).json({
+            return res.status(200).json({
                 message:'Email ID not exist'
             });
         }
