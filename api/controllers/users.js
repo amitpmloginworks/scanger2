@@ -61,7 +61,7 @@ exports.user_login = (req,res,next) => {
             var decrypted = helpers.passwordDecrypted(user.password);
                     
                 if(decrypted != req.body.password ) {
-                    return res.status(400).json({
+                    return res.status(200).json({
                         message: 'Auth Failed'
                     });
                 }else{
@@ -88,7 +88,7 @@ exports.user_login = (req,res,next) => {
                     user_id:user._id
                 });
                 }
-                res.status(400).json({
+                res.status(200).json({
                     message: 'Auth Failed'
                 });
         }else{
