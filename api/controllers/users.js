@@ -129,7 +129,7 @@ exports.reset_password = (req, res, next) => {
         var content_body1 = '<p>We heard that you lost your Scavanger password,don’t worry! You can use the following link to reset your password.</p>';
          var content_body2  = '<p>If you don’t use this link within 3 hours, it will expire. To get a new password reset link, visit <a href="https://scvanger2app.herokuapp.com/password_reset?key='+token+'&id='+result._id+'">https://scvanger2app.herokuapp.com/password_reset</a></p><p>Thanks</p><p>Your friends at Scavanger</p>';
         // var content_body2  = '<p>If you don’t use this link within 3 hours, it will expire. To get a new password reset link, visit <a href="http://localhost:3000/password_reset?key='+token+'&id='+result._id+'">http://localhost:3000/password_reset</a></p><p>Thanks</p><p>Your friends at Scavanger</p>';
-        var image='<img src="https://s3-us-west-2.amazonaws.com/helpsite-beanstalk/articles/templates_new_template.png">'
+        var image='<img src="http://res.cloudinary.com/loginworks/image/upload/v1549534966/demo/rjvu3jriubagslie1qhz.jpg">'
          content_body = content_body1 + content_body2+image;
         var mailOptions = {
             from: 'scavanger@gmail.com',
