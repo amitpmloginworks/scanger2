@@ -80,7 +80,10 @@ exports.user_login = (req,res,next) => {
                         expiresIn: "1h"
                     }
                     );
-                    const data = { email : user.email};
+                    const data = { email : user.email
+                        image_url:user.profile_pic,
+                        username:user.username          
+                                   };
                 return res.status(200).json({
                     message: 'Auth Successful',
                     data : data,
