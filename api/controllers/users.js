@@ -12,7 +12,7 @@ exports.user_signup = (req,res,next) => {
     .exec()
     .then(user => {
         if(user){
-            return res.status(409).json({
+            return res.status(200).json({
                 message:"Email ID exist"
             });
         }else{
