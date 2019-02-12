@@ -1,0 +1,54 @@
+<% include partials/header %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <% include partials/sidebar %>
+        <div class="main-content">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">Active Users</div>
+                                <div class="card-body">
+                                    <hr>
+                                    <div class="container">      
+                                            <table class="table table-bordered">
+                                              <thead>
+                                                <tr>
+                                                  <th>Email</th>
+                                                  <th>UserName</th>
+                                                  <th>Name</th>
+                                                  <th>SurName</th> 
+                                                  <th>Profile Picture</th>
+                                                  
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <% for(var i=0; i < data.length; i++) { %>
+                                                <tr>
+                                                  <td><%= data[i].email %></td>
+                                                  <td><%= data[i].username %></td>
+                                                  <td><%= data[i].name %></td>
+                                               
+                                                  <td><%= data[i].surname %></td>
+                                                  <td>
+                                                      
+                                                    <img src="<%= data[i].profile_pic %>">
+                                                </td>
+                                                </tr>
+                                                <% } %>
+                                              </tbody>
+                                            </table>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+ 
+</body>
+   
+
+<% include partials/footer %>
+
+</script>

@@ -11,7 +11,9 @@ const cloudinaryStorage = require("multer-storage-cloudinary");
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
+const fs=require('fs')
+const qrcode = require('qrcode');
+var Rx=require('rxjs')
 // const router = express.Router();
 cloudinary.config({ 
   cloud_name: 'loginworks', 
@@ -49,7 +51,7 @@ exports.loginRedirect = (req,res,next) => {
     },
     // "url": "https://secure-escarpment-31573.herokuapp.com/user/login",
      "url":"https://scvanger2app.herokuapp.com/user/login",
-   // "url":"http://localhost:3000/user/login",
+  //  "url":"http://localhost:3000/user/login",
     "body": JSON.stringify({
             "email" : email,
             "password" : password
@@ -117,7 +119,7 @@ console.log('image')
 // List Qrcode
 
 exports.listqrcode = (req,res,next) => {
-
+console.log('tap')
   sess = req.session;
 
  if(req.query.action)
@@ -175,6 +177,7 @@ Qrcode.deleteOne(delquery)
 
 
 exports.insert_qrcode = (req,res,next) => {
+   var qrcodeurlgen
   console.log('file',req.file.url)
  
   // console.log('req',req.files)
@@ -196,22 +199,44 @@ exports.insert_qrcode = (req,res,next) => {
     // res.redirect('/qrcodegenerator?id='+id);
     res.redirect('/listqrcode');
   }).catch(err=>console.log(err));
-  }else{
-    console.log('req'+req.body.PlaceType)
-  const qrcodes = new Qrcode({
+}else{
+  var sub= Rx.Observable.create(observer => {
+  
+   qrcode.toDataURL(req.body.qr_code, function (err, url) {
+observer.next(url)
+  // cloudinary.v2.uploader.upload(url, 
+  // function(error, result) {
+  //   console.log('hope',result, error);
+  // observer.next(result)
+  //  qrcodeurlgen=result
+//  });
+   })
+
+  })
+
+  sub.subscribe((x)=>
+  {
+//  qrcodeurlgen=x.secure_url
+qrcodeurlgen=x
+  console.log('xxxxx',qrcodeurlgen)
+    const qrcodes = new Qrcode({
         _id: new mongoose.Types.ObjectId(),
         location: req.body.location,
         name: req.body.name,
         points: req.body.points,
         qrcode: req.body.qr_code,
         PlaceType:req.body.PlaceType,
-        ImageUrl:req.file.url
+        ImageUrl:req.file.url,
+        qrcodeurl:qrcodeurlgen
     });
     qrcodes.save().then(result=>{
-      // res.render("qrcodegenerator",{layout:false,user_email: sess.email});
-      res.redirect('/listqrcode');
+      
+  res.redirect('/listqrcode');
     }).catch(err=>console.log(err));
-    // res.redirect("qrcodegenerator",{user_email: sess.email});
+  }
+  )
+
+   
   }
 }
 
@@ -279,4 +304,25 @@ exports.logout = (req,res,next) => {
   });
 }
 
+exports.activeusers=(req,res,next)=>{
+  console.log('sess',req.session)
+  console.log('hii')
+User.find({status:1}).exec().then(result=>{
+  console.log('res',result)
+res.render("active_user",{user_email:sess.email,data:result})
+}).catch(err=>console.log(err))
+}
+
+exports.printqr=(req,res,next)=>{
+ sess=req.session;
+  Qrcode.find()
+  .then(result=>{
+    console.log('res'+result)
+res.render("getandprint",{user_email:sess.email,data:result})
+  }).catch(err=>console.log(err))
+}
+
+exports.printpdf=(req,res,next)=>{
+  console.log('hhiii')
+}
 // module.exports = router;

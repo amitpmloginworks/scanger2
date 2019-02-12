@@ -12,6 +12,7 @@ const qrSchema = mongoose.Schema({
         type:Date,
         default: Date.now
     },
+     qrcodeurl:{type:String,required:false},
     status:{type:Number,default:1}
 });
 

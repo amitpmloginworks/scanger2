@@ -189,3 +189,27 @@ exports.user_delete = (req, res, next) => {
         });
     });
 }
+exports.logout=(req,res,next)=>{
+
+const id=req.body.userid;
+var query={_id:id};
+var update={
+    status:0
+
+}
+User.findOneAndUpdate(query,update)
+.exec()
+.then(result=>{
+res.status(200).json({
+    message:'logout..'
+})
+}).catch(err=>{
+    console.log(err);
+    res.status(200).json({
+        error:err
+    })
+})
+}
+
+
+

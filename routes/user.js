@@ -11,5 +11,7 @@ router.delete('/:userID',UsersController.user_delete);
 router.get('/placesdetail',listplaces.listqrcode)
 router.post('/getreedempoints',reedemcards.getreedempoints)
 router.get('/getreedemlist',listreedem.reedemcode)
+router.post('/logout',UsersController.logout)
+ router.post('/getscanreedempoints',reedemcards.scanreedempoints)
 
 module.exports = router;

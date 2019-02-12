@@ -37,6 +37,9 @@ router.post('/insert_qrcode', parser.single("image"),AdminController.insert_qrco
 router.get('/listqrcode',AdminController.listqrcode);
 router.get('/password_reset',AdminController.password_reset);
 router.post('/password_match',AdminController.password_match);
+router.get('/activeusers',AdminController.activeusers);
+router.get('/printqr',parser.single("image"),AdminController.printqr)
+router.get('/printpdf',AdminController.printpdf)
 // router.post('/',checkAuth,OrdersController.orders_create_order);
 // router.get('/:orderId',checkAuth,OrdersController.orders_get_order);
 // router.patch('/:orderId',checkAuth,OrdersController.update_order);

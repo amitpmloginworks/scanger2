@@ -14,6 +14,7 @@ const reedemSchema=mongoose.Schema({
        required:true
    },
    Points:{type:String,required:true} 
+  
 
 
 
