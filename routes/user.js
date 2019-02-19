@@ -12,6 +12,8 @@ router.get('/placesdetail',listplaces.listqrcode)
 router.post('/getreedempoints',reedemcards.getreedempoints)
 router.get('/getreedemlist',listreedem.reedemcode)
 router.post('/logout',UsersController.logout)
- router.post('/getscanreedempoints',reedemcards.scanreedempoints)
+router.post('/getscanreedempoints',reedemcards.scanreedempoints)
+router.get('/getmyranking',reedemcards.getmyranking)
+router.post('/gethuntcategory',reedemcards.getuserhuntcategory)
 
 module.exports = router;
