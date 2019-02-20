@@ -103,55 +103,80 @@ reedemcard.save().then(result=>{
     }) 
  }
  exports.getmyranking=(req,res,next)=>{
-   
-
-   Reedemcard.aggregate(
+    Reedemcard.aggregate(
 [{
     $group:{
-      _id:{userid:"$userid"},
+      _id:"$userid",
       totalpoints:{$sum:"$Points"},
       count:{$sum:1} 
     }
 
-}]
+},
+{
+    $lookup:
+    {
+    from: "users",
+    localField: "_id",
+    foreignField: "_id",
+    as: "user"
+    }
+    }]
 
 
    )
    .exec()
      .then(data=>{
+      return res.status(200).json({
+         data:data  
+      })
+
+//    Reedemcard.aggregate(
+// [{
+//     $group:{
+//       _id:{userid:"$userid"},
+//       totalpoints:{$sum:"$Points"},
+//       count:{$sum:1} 
+//     }
+
+// }]
+
+
+//    )
+//    .exec()
+//      .then(data=>{
      
 
-for(var i=0;i<data.length;i++)
-{
-    console.log('totalpoints'+data[i].totalpoints)
-  userdata.push({totalpoints:data[i].totalpoints})
+// for(var i=0;i<data.length;i++)
+// {
+//     console.log('totalpoints'+data[i].totalpoints)
+//   userdata.push({totalpoints:data[i].totalpoints})
 
-}
+// }
 
 
-      for(var i=0;i<data.length;i++)
-      {
-          console.log('userid',data[i]._id.userid)
-        User.findOne({ _id:data[i]._id.userid})
-        .exec()
-        .then(user => {
+//       for(var i=0;i<data.length;i++)
+//       {
+//           console.log('userid',data[i]._id.userid)
+//         User.findOne({ _id:data[i]._id.userid})
+//         .exec()
+//         .then(user => {
             
             
          
-           iddata.push({user:user})
-           console.log('data',iddata)
-           console.log(data.length,'kkkkk',iddata.length)
-           if(data.length==iddata.length)
-           {
-              console.log('userdata'+userdata)
-               return res.status(200).json({
-                data:iddata,
-                totalpoints:userdata
-              })
-           }
-        })   
+//            iddata.push({user:user})
+//            console.log('data',iddata)
+//            console.log(data.length,'kkkkk',iddata.length)
+//            if(data.length==iddata.length)
+//            {
+//               console.log('userdata'+userdata)
+//                return res.status(200).json({
+//                 data:iddata,
+//                 totalpoints:userdata
+//               })
+//            }
+//         })   
      
-      }
+//       }
     
     
    
