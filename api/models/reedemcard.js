@@ -13,7 +13,7 @@ const reedemSchema=mongoose.Schema({
        ref:"Qrcode",
        required:true
    },
-   Points:{type:String,required:true} 
+   Points:{type:Number,required:true} 
   
 
 
