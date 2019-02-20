@@ -112,6 +112,7 @@ reedemcard.save().then(result=>{
     }
 
 },
+ {$sort: {totalpoints: -1}},
 {
     $lookup:
     {
