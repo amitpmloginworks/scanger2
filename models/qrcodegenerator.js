@@ -13,7 +13,8 @@ const qrSchema = mongoose.Schema({
         default: Date.now
     },
      qrcodeurl:{type:String,required:false},
-    status:{type:Number,default:1}
+    status:{type:Number,default:1},
+     Value:{type:Number,default:0}
 });
 
 module.exports = mongoose.model('Qrcode',qrSchema);
