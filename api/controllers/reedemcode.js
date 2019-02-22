@@ -1,14 +1,99 @@
-// const Reedemcard=require('../models/reedemcard');
-// const getlatlngplace=require('../../models/qrcodegenerator')
-// const mongoose=require('mongoose');
-// const Qrcode = require('../../models/qrcodegenerator');
-//  exports.getreedempoints=(req,res,next)=>{
+
+const Reedemcard=require('../models/reedemcard');
+const getlatlngplace=require('../../models/qrcodegenerator')
+const mongoose=require('mongoose');
+const Qrcode = require('../../models/qrcodegenerator');
+ const iddata=[]
+const User = require('../models/user');
+const userdata=[]
+ exports.getreedempoints=(req,res,next)=>{
+
+
+
+
+
+// Reedemcard.findOne({listplaces:req.body.listplaces})
+// .select('Value')
+// .exec('userid','')
+// .then(result=>{
+//     res.status(200).json({
+//         result
+//     })
+// })
+
+
+
+Qrcode.find({_id:req.body.listplaces})
+.select('Value')
+.exec()
+.then(user=>{
+    console.log(user[0].Value)
+
+  
+
+
+  if(user[0].Value==1)
+  {
+    var points=(req.body.Points/100*25)
+const reedemcard=new Reedemcard({
+    _id:mongoose.Types.ObjectId(),
+    latlng:req.body.latlng,
+    userid:req.body.userid,
+    listplaces:req.body.listplaces,
+    Points:points
+})
+reedemcard.save().then(result=>{
+    res.status(200).json({
+       message:'User Earned 25%' 
+    })
+
+}).catch(err=>{
+    res.status(500).json({
+       error:err 
+    })
+})
+  }
+  else{
+      console.log('hi')
+       var id = req.body.listplaces;
+var query = {_id:id};
+var update = {
+    Value:1
+}
+Qrcode.findOneAndUpdate(query,update)
+.exec()
+.then(result=>(result=>{
+
+})).catch(err=>console.log(err))
+
+const reedemcard=new Reedemcard({
+    _id:mongoose.Types.ObjectId(),
+    latlng:req.body.latlng,
+    userid:req.body.userid,
+    listplaces:req.body.listplaces,
+    Points:req.body.Points
+})
+reedemcard.save().then(result=>{
+    res.status(200).json({
+       message:'User Earned 100%' 
+    })
+
+}).catch(err=>{
+    res.status(500).json({
+       error:err 
+    })
+})
+  }
+}
+)
+
+
 
 
 //   var id = req.body.listplaces;
 // var query = {_id:id};
 // var update = {
-//     status: 0
+//     Value:1
 // }
 // Qrcode.findOneAndUpdate(query,update)
 // .exec()
@@ -21,70 +106,18 @@
 //     latlng:req.body.latlng,
 //     userid:req.body.userid,
 //     listplaces:req.body.listplaces,
-//     Points:req.body.Points 
+//     Points:req.body.Points
 // })
 // reedemcard.save().then(result=>{
 //     res.status(200).json({
 //        message:'User Created' 
 //     })
+
 // }).catch(err=>{
 //     res.status(500).json({
 //        error:err 
 //     })
 // })
-
-
-
-
-//  }
-//  exports.scanreedempoints=(req,res,next)=>{
-//    var code=req.body.Points
-//    console.log(code)
-//    getlatlngplace.find({qrcode:code})
-//     .exec()
-//     .then(data=>{
-//         return res.status(200).json({
-//             data:data
-//         })
-//     }) 
-//  }
-const Reedemcard=require('../models/reedemcard');
-const getlatlngplace=require('../../models/qrcodegenerator')
-const mongoose=require('mongoose');
-const Qrcode = require('../../models/qrcodegenerator');
- const iddata=[]
-const User = require('../models/user');
-const userdata=[]
- exports.getreedempoints=(req,res,next)=>{
-
-
-  var id = req.body.listplaces;
-var query = {_id:id};
-var update = {
-    status: 0
-}
-Qrcode.findOneAndUpdate(query,update)
-.exec()
-.then(result=>(result=>{
-})).catch(err=>console.log(err));
-
-
-const reedemcard=new Reedemcard({
-    _id:mongoose.Types.ObjectId(),
-    latlng:req.body.latlng,
-    userid:req.body.userid,
-    listplaces:req.body.listplaces,
-    Points:req.body.Points 
-})
-reedemcard.save().then(result=>{
-    res.status(200).json({
-       message:'User Created' 
-    })
-}).catch(err=>{
-    res.status(500).json({
-       error:err 
-    })
-})
 
 
 
@@ -103,16 +136,20 @@ reedemcard.save().then(result=>{
     }) 
  }
  exports.getmyranking=(req,res,next)=>{
-    Reedemcard.aggregate(
+   
+
+   Reedemcard.aggregate(
 [{
     $group:{
       _id:"$userid",
       totalpoints:{$sum:"$Points"},
       count:{$sum:1} 
-    }
+   
+    },
+    
 
 },
- {$sort: {totalpoints: -1}},
+{$sort: {totalpoints: -1}},
 {
     $lookup:
     {
@@ -130,23 +167,6 @@ reedemcard.save().then(result=>{
       return res.status(200).json({
          data:data  
       })
-
-//    Reedemcard.aggregate(
-// [{
-//     $group:{
-//       _id:{userid:"$userid"},
-//       totalpoints:{$sum:"$Points"},
-//       count:{$sum:1} 
-//     }
-
-// }]
-
-
-//    )
-//    .exec()
-//      .then(data=>{
-     
-
 // for(var i=0;i<data.length;i++)
 // {
 //     console.log('totalpoints'+data[i].totalpoints)
@@ -199,6 +219,9 @@ exports.getuserhuntcategory=(req,res,next)=>{
         })
     })
 }
+
+
+ 
 
  
 
