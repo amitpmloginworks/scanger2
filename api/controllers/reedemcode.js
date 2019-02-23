@@ -127,13 +127,16 @@ reedemcard.save().then(result=>{
    var code=req.body.Points
   
    console.log(code)
+   Reedemcard.find().then(matchdata=>{
    getlatlngplace.find({qrcode:code})
     .exec()
     .then(data=>{
         return res.status(200).json({
-            data:data
+            data:data,
+            matchdata:matchdata
         })
     }) 
+})
  }
  exports.getmyranking=(req,res,next)=>{
    
