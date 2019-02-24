@@ -36,7 +36,9 @@
                                                       
                                                         <img src="<%= data[i].userid.profile_pic %>">
                                                     </td>
+                                                    <% if (data[i].listplaces!=null) { %>
                                                     <td><%= data[i].listplaces.name %></td>
+                                                   
                                                     <td><%= data[i].listplaces.location %></td>
                                                     <td><%= data[i].listplaces.PlaceType %></td>
                                                     <td><%= data[i].listplaces.qrcode %></td>
@@ -45,6 +47,7 @@
                                                         <img src="<%= data[i].listplaces.ImageUrl %>">
                                                     </td>
                                                     <td><%= data[i].listplaces.points %></td>
+                                                    <% } %>
                                                     <td><%= data[i].Points %></td>
                                                     <% } %>
                                                 </tr>
