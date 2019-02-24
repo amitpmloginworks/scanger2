@@ -11,6 +11,7 @@ const cloudinaryStorage = require("multer-storage-cloudinary");
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const ReedemCard=require('../api/models/reedemcard')
 const fs=require('fs')
 const qrcode = require('qrcode');
 var Rx=require('rxjs')
@@ -325,4 +326,57 @@ res.render("getandprint",{user_email:sess.email,data:result})
 exports.printpdf=(req,res,next)=>{
   console.log('hhiii')
 }
+exports.getgainpoints=(req,res,next)=>{
+
+  sess = req.session;
+   ReedemCard.find()
+   .populate('userid listplaces').select('location listplaces Points userid')
+   .then(data=>{
+   
+    
+     res.render("getpointse",{user_email:sess.email,data:data})
+   }).catch(err=>console.log(err))
+   
+ 
+ 
+ }
+ exports.getgainranking=(req,res,next)=>{
+ 
+   sess = req.session;
+   ReedemCard.aggregate(
+     [{
+         $group:{
+           _id:"$userid",
+           totalpoints:{$sum:"$Points"},
+           count:{$sum:1} 
+        
+         },
+         
+     
+     },
+     {$sort: {totalpoints: -1}},
+     {
+         $lookup:
+         {
+         from: "users",
+         localField: "_id",
+         foreignField: "_id",
+         as: "user"
+         }
+         }]
+     
+     
+        )
+        .exec()
+        .then(data=>{
+   
+    
+         res.render("getranking",{user_email:sess.email,data:data})
+       }).catch(err=>console.log(err))
+     
+         
+    
+  
+  
+  }
 // module.exports = router;

@@ -1,0 +1,66 @@
+<% include partials/header %>
+<body class="animsition">
+    <div class="page-wrapper">
+        <% include partials/sidebar %>
+        <div class="main-content">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header">Gained Points By User</div>
+                                <div class="card-body">
+                                    <hr>
+                                    <div class="container">      
+                                            <table class="table table-bordered">
+                                              <thead>
+                                                <tr>
+                                                  <th>Name</th>
+                                                  <th>Profile Pictire</th>
+                                                  <th>QR Name</th>
+                                                  <th>Location</th> 
+                                                  <th>PlaceType</th>
+                                                  <th>Qr Code</th> 
+                                                  <th>Qr Preview</th>
+                                                  <th>Actual Points</th> 
+                                                  <th>Points Earned</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                <% for(var i=0; i < data.length; i++) { %>
+                                                    <tr>
+                                                            <% if (data[i].userid!=null) { %> 
+                                                      <td><%= data[i].userid.username %></td>
+                                                     
+                                                      <td>
+                                                      
+                                                        <img src="<%= data[i].userid.profile_pic %>">
+                                                    </td>
+                                                    <td><%= data[i].listplaces.name %></td>
+                                                    <td><%= data[i].listplaces.location %></td>
+                                                    <td><%= data[i].listplaces.PlaceType %></td>
+                                                    <td><%= data[i].listplaces.qrcode %></td>
+                                                    <td>
+                                                      
+                                                        <img src="<%= data[i].listplaces.ImageUrl %>">
+                                                    </td>
+                                                    <td><%= data[i].listplaces.points %></td>
+                                                    <td><%= data[i].Points %></td>
+                                                    <% } %>
+                                                </tr>
+                                                    <% } %>
+                                              </tbody>
+                                            </table>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+ 
+</body>
+   
+
+<% include partials/footer %>
+
+</script>
