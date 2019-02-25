@@ -120,41 +120,64 @@ console.log('image')
 // List Qrcode
 
 exports.listqrcode = (req,res,next) => {
-console.log('tap')
+  console.log('tap')
   sess = req.session;
 
- if(req.query.action)
- {
+  if (req.query.action) {
 
-var delid = req.query.id;
-var delquery = {_id:delid};
-Qrcode.deleteOne(delquery)
-.exec()
-.then(result=>(result=>{
-})).catch(err=>console.log(err));
- }
-  if(req.query.id){
-  var id = req.query.id;
-  var status = req.query.status;
-  var query = {_id:id};
-  if(status == 1)
-  {
-    status = 0;
-  }else{
-    status = 1;
+    var delid = req.query.id;
+    var delquery = { _id: delid };
+    Qrcode.deleteOne(delquery)
+      .exec()
+      .then(result => (result => {
+      })).catch(err => console.log(err));
   }
-  var update = {
+  if (req.query.id) {
+    var id = req.query.id;
+    var status = req.query.status;
+    var query = { _id: id };
+    if (status == 1) {
+      status = 0;
+    } else {
+      status = 1;
+    }
+    var update = {
       status: status
+    }
+    Qrcode.findOneAndUpdate(query, update)
+      .exec()
+      .then(result => (result => {
+      })).catch(err => console.log(err));
   }
-  Qrcode.findOneAndUpdate(query,update)
-  .exec()
-  .then(result=>(result=>{
-  })).catch(err=>console.log(err));
-  }
+
+  // console.log('page',req.params.page)
+
+
+  var perPage = 9
+  var page = req.params.page || 1
+
   Qrcode.find()
-  .then(result=>{
-      res.render("listqrcode",{user_email: sess.email,data:result});
-  }).catch(err=>console.log(err));
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    .exec(function (err, products) {
+      Qrcode.count().exec(function (err, count) {
+        if (err) return next(err)
+
+        res.render('listqrcode', {
+          user_email: sess.email,
+          data: products,
+          current: page,
+          pages: Math.ceil(count / perPage)
+        })
+      })
+    })
+
+
+
+  // Qrcode.find()
+  // .then(result=>{
+  //     res.render("listqrcode",{user_email: sess.email,data:result});
+  // }).catch(err=>console.log(err));
 }
 
 //upload image
@@ -178,66 +201,65 @@ Qrcode.deleteOne(delquery)
 
 
 exports.insert_qrcode = (req,res,next) => {
-   var qrcodeurlgen
-  console.log('file',req.file.url)
- 
+  var qrcodeurlgen
+  console.log('file', req.file.url)
+
   // console.log('req',req.files)
   sess = req.session;
-  if(req.body.update_id){
+  if (req.body.update_id) {
     const id = req.body.update_id;
-    var query = {_id:id};
+    var query = { _id: id };
     var update = {
       location: req.body.location,
       name: req.body.name,
       points: req.body.points,
       qrcode: req.body.qr_code,
-      PlaceType:req.body.PlaceType,
-      ImageUrl:req.file.url
+      PlaceType: req.body.PlaceType,
+      ImageUrl: req.file.url
     }
-  Qrcode.findOneAndUpdate(query,update)
-  .exec()
-  .then(result=>{
-    // res.redirect('/qrcodegenerator?id='+id);
-    res.redirect('/listqrcode');
-  }).catch(err=>console.log(err));
-}else{
-  var sub= Rx.Observable.create(observer => {
-  
-   qrcode.toDataURL(req.body.qr_code, function (err, url) {
-observer.next(url)
-  // cloudinary.v2.uploader.upload(url, 
-  // function(error, result) {
-  //   console.log('hope',result, error);
-  // observer.next(result)
-  //  qrcodeurlgen=result
-//  });
-   })
+    Qrcode.findOneAndUpdate(query, update)
+      .exec()
+      .then(result => {
+        // res.redirect('/qrcodegenerator?id='+id);
+        res.redirect('/listqrcode/1');
+      }).catch(err => console.log(err));
+  } else {
+    var sub = Rx.Observable.create(observer => {
 
-  })
+      qrcode.toDataURL(req.body.qr_code, function (err, url) {
+        observer.next(url)
+        // cloudinary.v2.uploader.upload(url, 
+        // function(error, result) {
+        //   console.log('hope',result, error);
+        // observer.next(result)
+        //  qrcodeurlgen=result
+        //  });
+      })
 
-  sub.subscribe((x)=>
-  {
-//  qrcodeurlgen=x.secure_url
-qrcodeurlgen=x
-  console.log('xxxxx',qrcodeurlgen)
-    const qrcodes = new Qrcode({
+    })
+
+    sub.subscribe((x) => {
+      //  qrcodeurlgen=x.secure_url
+      qrcodeurlgen = x
+      console.log('xxxxx', qrcodeurlgen)
+      const qrcodes = new Qrcode({
         _id: new mongoose.Types.ObjectId(),
         location: req.body.location,
         name: req.body.name,
         points: req.body.points,
         qrcode: req.body.qr_code,
-        PlaceType:req.body.PlaceType,
-        ImageUrl:req.file.url,
-        qrcodeurl:qrcodeurlgen
-    });
-    qrcodes.save().then(result=>{
-      
-  res.redirect('/listqrcode');
-    }).catch(err=>console.log(err));
-  }
-  )
+        PlaceType: req.body.PlaceType,
+        ImageUrl: req.file.url,
+        qrcodeurl: qrcodeurlgen
+      });
+      qrcodes.save().then(result => {
 
-   
+        res.redirect('/listqrcode/1');
+      }).catch(err => console.log(err));
+    }
+    )
+
+
   }
 }
 
@@ -307,35 +329,86 @@ exports.logout = (req,res,next) => {
 
 exports.activeusers=(req,res,next)=>{
   console.log('sess',req.session)
-  console.log('hii')
-User.find({status:1}).exec().then(result=>{
-  console.log('res',result)
-res.render("active_user",{user_email:sess.email,data:result})
-}).catch(err=>console.log(err))
+  var perPage = 9
+  var page = req.params.page || 1
+
+  User.find({status:1})
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    .exec(function (err, products) {
+      User.count().exec(function (err, count) {
+        if (err) return next(err)
+
+        res.render('active_user', {
+          user_email: sess.email,
+          data: products,
+          current: page,
+          pages: Math.ceil(count / perPage)
+        })
+      })
+    })
+
+// User.find({status:1}).exec().then(result=>{
+//   console.log('res',result)
+// res.render("active_user",{user_email:sess.email,data:result})
+// }).catch(err=>console.log(err))
+
 }
 
 exports.printqr=(req,res,next)=>{
  sess=req.session;
-  Qrcode.find()
-  .then(result=>{
-    console.log('res'+result)
-res.render("getandprint",{user_email:sess.email,data:result})
-  }).catch(err=>console.log(err))
+ var perPage = 9
+  var page = req.params.page || 1
+
+  Qrcode.find({status:1})
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    .exec(function (err, products) {
+      Qrcode.count().exec(function (err, count) {
+        if (err) return next(err)
+
+        res.render('getandprint', {
+          user_email: sess.email,
+          data: products,
+          current: page,
+          pages: Math.ceil(count / perPage)
+        })
+      })
+    })
+
 }
 
 exports.printpdf=(req,res,next)=>{
   console.log('hhiii')
 }
 exports.getgainpoints=(req,res,next)=>{
+  sess = req.session
+  var perPage = 9
+  var page = req.params.page || 1
 
-  sess = req.session;
-   ReedemCard.find()
-   .populate('userid listplaces').select('location listplaces Points userid')
-   .then(data=>{
+  ReedemCard.find().populate('userid listplaces').select('location listplaces Points userid')
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    .exec(function (err, products) {
+      ReedemCard.count().exec(function (err, count) {
+        if (err) return next(err)
+
+        res.render('getpointse', {
+          user_email: sess.email,
+          data: products,
+          current: page,
+          pages: Math.ceil(count / perPage)
+        })
+      })
+    })
+  // sess = req.session;
+  //  ReedemCard.find()
+  //  .populate('userid listplaces').select('location listplaces Points userid')
+  //  .then(data=>{
    
     
-     res.render("getpointse",{user_email:sess.email,data:data})
-   }).catch(err=>console.log(err))
+  //    res.render("getpointse",{user_email:sess.email,data:data})
+  //  }).catch(err=>console.log(err))
    
  
  
@@ -343,36 +416,77 @@ exports.getgainpoints=(req,res,next)=>{
  exports.getgainranking=(req,res,next)=>{
  
    sess = req.session;
+   var perPage = 9
+   var page = req.params.page || 1
+ 
    ReedemCard.aggregate(
-     [{
-         $group:{
-           _id:"$userid",
-           totalpoints:{$sum:"$Points"},
-           count:{$sum:1} 
+       [{
+           $group:{
+             _id:"$userid",
+             totalpoints:{$sum:"$Points"},
+             count:{$sum:1} 
+          
+           },
+           
+       
+       },
+       {$sort: {totalpoints: -1}},
+       {
+           $lookup:
+           {
+           from: "users",
+           localField: "_id",
+           foreignField: "_id",
+           as: "user"
+           }
+           }]
+       
+       
+          )
+     .skip((perPage * page) - perPage)
+     .limit(perPage)
+     .exec(function (err, products) {
+       ReedemCard.count().exec(function (err, count) {
+         if (err) return next(err)
+  console.log(count)
+         res.render('getranking', {
+           user_email: sess.email,
+           data: products,
+           current: page,
+           pages: Math.ceil(count / perPage)
+         })
+       })
+     })
+  //  ReedemCard.aggregate(
+  //    [{
+  //        $group:{
+  //          _id:"$userid",
+  //          totalpoints:{$sum:"$Points"},
+  //          count:{$sum:1} 
         
-         },
+  //        },
          
      
-     },
-     {$sort: {totalpoints: -1}},
-     {
-         $lookup:
-         {
-         from: "users",
-         localField: "_id",
-         foreignField: "_id",
-         as: "user"
-         }
-         }]
+  //    },
+  //    {$sort: {totalpoints: -1}},
+  //    {
+  //        $lookup:
+  //        {
+  //        from: "users",
+  //        localField: "_id",
+  //        foreignField: "_id",
+  //        as: "user"
+  //        }
+  //        }]
      
      
-        )
-        .exec()
-        .then(data=>{
+  //       )
+  //       .exec()
+  //       .then(data=>{
    
     
-         res.render("getranking",{user_email:sess.email,data:data})
-       }).catch(err=>console.log(err))
+  //        res.render("getranking",{user_email:sess.email,data:data})
+  //      }).catch(err=>console.log(err))
      
          
     

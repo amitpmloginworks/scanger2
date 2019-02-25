@@ -11,7 +11,7 @@
                                 <div class="card-header">Ranking</div>
                                 <div class="card-body">
                                     <hr>
-                                    <div class="container">      
+                                    <div style="max-width:100%;" class="container">      
                                             <table class="table table-bordered">
                                               <thead>
                                                 <tr>
@@ -24,20 +24,48 @@
                                               <tbody>
                                                 <% for(var i=0; i < data.length; i++) { %>
                                                 <tr>
-                                                        <% if (data[i].user[0]!=null) { %> 
+                                                        <% if (data[i].user[0]!=null && data[i].totalpoints!=0) { %> 
                                                   <td><%= data[i].user[0].username %></td>
-                                                  <td>   
-                                                    <img style="    width: 200px;" src="<%= data[i].user[0].profile_pic %>">
+                                                  <td style="    width: 200px;">   
+                                                    <img style="    width: 100px;" src="<%= data[i].user[0].profile_pic %>">
                                                 </td>
-                                                <% } %>
+                                               
                                                   <td><%= data[i].totalpoints %></td>
                                                   <td><%= i+1 %></td>
-                                               
+                                                  <% } %>
                                                  </tr>
                                                 <% } %>
                                               </tbody>
                                             </table>
                                   </div>
+                                  <% if (pages > 0) { %>
+                                    <ul class="pagination text-center">
+                                        <% if (current == 1) { %>
+                                            <li class="disabled"><a>First</a></li>
+                                        <% } else { %>
+                                            <li><a href="/getgainranking/1">First</a></li>
+                                        <% } %>
+                                        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                        <% if (i !== 1) { %>
+                                            <li class="disabled"><a>...</a></li>
+                                        <% } %>
+                                        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                            <% if (i == current) { %>
+                                                <li class="active"><a><%= i %></a></li>
+                                            <% } else { %>
+                                                <li><a href="/getgainranking/<%= i %>"><%= i %></a></li>
+                                            <% } %>
+                                            <% if (i == Number(current) + 4 && i < pages) { %>
+                                                <li class="disabled"><a>...</a></li>
+                                            <% } %>
+                                        <% } %>
+                                        <% if (current == pages) { %>
+                                            <li class="disabled"><a>Last</a></li>
+                                        <% } else { %>
+                                            <li><a href="/getgainranking/<%= pages %>">Last</a></li>
+                                        <% } %>
+                                    </ul>
+                                <% } %>
                               </div>
                             </div>
                         </div>

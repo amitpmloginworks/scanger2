@@ -33,15 +33,15 @@ router.get('/logout', AdminController.logout);
 
 router.get('/qrcodegenerator', AdminController.qrcodegenerator);
 router.post('/insert_qrcode', parser.single("image"),AdminController.insert_qrcode);
-
-router.get('/listqrcode',AdminController.listqrcode);
+router.get('/listqrcode/:page',AdminController.listqrcode);
+// router.get('/listqrcode',AdminController.listqrcode);
 router.get('/password_reset',AdminController.password_reset);
 router.post('/password_match',AdminController.password_match);
-router.get('/activeusers',AdminController.activeusers);
-router.get('/printqr',parser.single("image"),AdminController.printqr)
+router.get('/activeusers/:page',AdminController.activeusers);
+router.get('/printqr/:page',parser.single("image"),AdminController.printqr)
 router.get('/printpdf',AdminController.printpdf)
-router.get('/getpointsgain',AdminController.getgainpoints)
-router.get('/getgainranking',AdminController.getgainranking)
+router.get('/getpointsgain/:page',AdminController.getgainpoints)
+router.get('/getgainranking/:page',AdminController.getgainranking)
 // router.post('/',checkAuth,OrdersController.orders_create_order);
 // router.get('/:orderId',checkAuth,OrdersController.orders_get_order);
 // router.patch('/:orderId',checkAuth,OrdersController.update_order);

@@ -11,7 +11,7 @@
                                 <div class="card-header">Preview and Print QR</div>
                                 <div class="card-body">
                                     <hr>
-                                      <div class="container">      
+                                      <div style="max-width:100% ;" class="container">      
                                             <table class="table table-bordered">
                                               <thead>
                                                 <tr style="text-align: center;">
@@ -48,15 +48,36 @@
                                               </tbody>
                                             </table>
                                             
-                                   <!--<a href="javascript:demoFromHTML()" class="button">Run Code</a>-->
-                                    
-<!--<div id="content">
-    <h1>  
-        We support special element handlers. Register them with jQuery-style.
-    </h1>
-</div>-->
+             
                                    </div>
-                                
+                                   <% if (pages > 0) { %>
+                                    <ul class="pagination text-center">
+                                        <% if (current == 1) { %>
+                                            <li class="disabled"><a>First</a></li>
+                                        <% } else { %>
+                                            <li><a href="/printqr/1">First</a></li>
+                                        <% } %>
+                                        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                        <% if (i !== 1) { %>
+                                            <li class="disabled"><a>...</a></li>
+                                        <% } %>
+                                        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                            <% if (i == current) { %>
+                                                <li class="active"><a><%= i %></a></li>
+                                            <% } else { %>
+                                                <li><a href="/printqr/<%= i %>"><%= i %></a></li>
+                                            <% } %>
+                                            <% if (i == Number(current) + 4 && i < pages) { %>
+                                                <li class="disabled"><a>...</a></li>
+                                            <% } %>
+                                        <% } %>
+                                        <% if (current == pages) { %>
+                                            <li class="disabled"><a>Last</a></li>
+                                        <% } else { %>
+                                            <li><a href="/printqr/<%= pages %>">Last</a></li>
+                                        <% } %>
+                                    </ul>
+                                <% } %>
 
                                     </div>
                             </div>

@@ -11,7 +11,7 @@
                                 <div class="card-header">Gained Points By User</div>
                                 <div class="card-body">
                                     <hr>
-                                    <div class="container">      
+                                    <div style="max-width:100%;" class="container">      
                                             <table class="table table-bordered">
                                               <thead>
                                                 <tr>
@@ -29,14 +29,16 @@
                                               <tbody>
                                                 <% for(var i=0; i < data.length; i++) { %>
                                                     <tr>
-                                                            <% if (data[i].userid!=null) { %> 
+                                                            <% if (data[i].userid!=null && data[i].listplaces!=null) { %> 
                                                       <td><%= data[i].userid.username %></td>
                                                      
                                                       <td>
                                                       
                                                         <img src="<%= data[i].userid.profile_pic %>">
                                                     </td>
+                                                    <!-- <% if (data[i].listplaces!=null) { %> -->
                                                     <td><%= data[i].listplaces.name %></td>
+                                                   
                                                     <td><%= data[i].listplaces.location %></td>
                                                     <td><%= data[i].listplaces.PlaceType %></td>
                                                     <td><%= data[i].listplaces.qrcode %></td>
@@ -45,6 +47,7 @@
                                                         <img src="<%= data[i].listplaces.ImageUrl %>">
                                                     </td>
                                                     <td><%= data[i].listplaces.points %></td>
+                                                    <!-- <% } %> -->
                                                     <td><%= data[i].Points %></td>
                                                     <% } %>
                                                 </tr>
@@ -52,6 +55,34 @@
                                               </tbody>
                                             </table>
                                   </div>
+                                  <% if (pages > 0) { %>
+                                    <ul class="pagination text-center">
+                                        <% if (current == 1) { %>
+                                            <li class="disabled"><a>First</a></li>
+                                        <% } else { %>
+                                            <li><a href="/getpointsgain/1">First</a></li>
+                                        <% } %>
+                                        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                        <% if (i !== 1) { %>
+                                            <li class="disabled"><a>...</a></li>
+                                        <% } %>
+                                        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                            <% if (i == current) { %>
+                                                <li class="active"><a><%= i %></a></li>
+                                            <% } else { %>
+                                                <li><a href="/getpointsgain/<%= i %>"><%= i %></a></li>
+                                            <% } %>
+                                            <% if (i == Number(current) + 4 && i < pages) { %>
+                                                <li class="disabled"><a>...</a></li>
+                                            <% } %>
+                                        <% } %>
+                                        <% if (current == pages) { %>
+                                            <li class="disabled"><a>Last</a></li>
+                                        <% } else { %>
+                                            <li><a href="/getpointsgain/<%= pages %>">Last</a></li>
+                                        <% } %>
+                                    </ul>
+                                <% } %>
                               </div>
                             </div>
                         </div>

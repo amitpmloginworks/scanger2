@@ -11,7 +11,7 @@
                                 <div class="card-header">Active Users</div>
                                 <div class="card-body">
                                     <hr>
-                                    <div class="container">      
+                                    <div style="max-width:100% " class="container">      
                                             <table class="table table-bordered">
                                               <thead>
                                                 <tr>
@@ -33,13 +33,43 @@
                                                   <td><%= data[i].surname %></td>
                                                   <td>
                                                       
-                                                    <img src="<%= data[i].profile_pic %>">
+                                                    <img  style="    width: 100px;
+                                                    height: 100px;
+                                                    align-items: center;" src="<%= data[i].profile_pic %>">
                                                 </td>
                                                 </tr>
                                                 <% } %>
                                               </tbody>
                                             </table>
                                   </div>
+                                  <% if (pages > 0) { %>
+                                    <ul class="pagination text-center">
+                                        <% if (current == 1) { %>
+                                            <li class="disabled"><a>First</a></li>
+                                        <% } else { %>
+                                            <li><a href="/activeusers/1">First</a></li>
+                                        <% } %>
+                                        <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                                        <% if (i !== 1) { %>
+                                            <li class="disabled"><a>...</a></li>
+                                        <% } %>
+                                        <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                                            <% if (i == current) { %>
+                                                <li class="active"><a><%= i %></a></li>
+                                            <% } else { %>
+                                                <li><a href="/activeusers/<%= i %>"><%= i %></a></li>
+                                            <% } %>
+                                            <% if (i == Number(current) + 4 && i < pages) { %>
+                                                <li class="disabled"><a>...</a></li>
+                                            <% } %>
+                                        <% } %>
+                                        <% if (current == pages) { %>
+                                            <li class="disabled"><a>Last</a></li>
+                                        <% } else { %>
+                                            <li><a href="/activeusers/<%= pages %>">Last</a></li>
+                                        <% } %>
+                                    </ul>
+                                <% } %>
                               </div>
                             </div>
                         </div>
