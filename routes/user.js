@@ -15,5 +15,6 @@ router.post('/logout',UsersController.logout)
 router.post('/getscanreedempoints',reedemcards.scanreedempoints)
 router.get('/getmyranking',reedemcards.getmyranking)
 router.post('/gethuntcategory',reedemcards.getuserhuntcategory)
+router.post('/loginactive',UsersController.loginactive)
 
 module.exports = router;
