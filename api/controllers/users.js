@@ -210,6 +210,27 @@ res.status(200).json({
     })
 })
 }
+exports.loginactive=(req,res,next)=>{
+    const id=req.body.userid;
+var query={_id:id};
+var update={
+    status:1
 
+}
+User.findOneAndUpdate(query,update)
+.exec()
+.then(result=>{
+    console.log(result)
+res.status(200).json({
+    message:'login..'
+})
+})
+.catch(err=>{
+    console.log(err);
+    res.status(200).json({
+        error:err
+    })
+})
+}
 
 
