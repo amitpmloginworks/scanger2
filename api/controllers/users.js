@@ -232,5 +232,18 @@ res.status(200).json({
     })
 })
 }
+exports.deleteaccount=(req,res,next)=>{
+    console.log('userid')
+    console.log(req.body.userid)
+    var delid = req.body.userid;
+    var delquery = { _id: delid };
+    User.deleteOne(delquery)
+      .exec()
+      .then(result =>  {
+        res.status(200).json({
+            data:'message'
+        })
 
+      }).catch(err => console.log(err));
+}
 
