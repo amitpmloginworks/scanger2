@@ -232,6 +232,30 @@ res.status(200).json({
     })
 })
 }
+exports.update=(req,res,next)=>{
+  
+   
+console.log('res',req.body.userid)
+  var  password1=helpers.passwordEncrypted(req.body.password)
+    console.log('password',password1)
+    var query={_id:req.body.userid}
+    var update={
+        email:req.body.email,
+        username:req.body.username,
+        password:password1,
+        profile_pic:req.body.profile_pic
+    }
+  User.findOneAndUpdate(query,update).exec()
+  .then(result=>{
+      res.status(200).json({
+          data:result
+      })
+  })
+   
+ 
+
+
+}
 exports.deleteaccount=(req,res,next)=>{
     console.log('userid')
     console.log(req.body.userid)
