@@ -270,4 +270,63 @@ exports.deleteaccount=(req,res,next)=>{
 
       }).catch(err => console.log(err));
 }
+exports.homedetail=(req,res,next)=>{
 
+console.log('hii')
+  
+    Reedemcard.aggregate(
+        [{
+            $group:{
+              _id:"$userid",
+              totalpoints:{$sum:"$Points"},
+              count:{$sum:1} 
+           
+            },
+            
+        
+        },
+        {$sort: {totalpoints: -1}},
+        {
+            $lookup:
+            {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "user"
+            }
+            }]
+        
+        
+           )
+           .exec()
+             .then(ranking=>{
+                qrcodegenrator.find().exec().then(result=>{
+                    Places.find().then(qrcodeparam=>{
+                        Reedemcard.find({userid:req.body.userid})
+    .populate('listplaces')
+    .select('location listplaces')
+    .then(datahunt=>{
+        return res.status(200).json({
+            datahunt:datahunt,
+            qrcodename:qrcodeparam,
+            data:result,
+          ranking:ranking
+        })
+    })
+                //         console.log('name',qrcodeparam)
+                //    return res.status(200).json({
+                //         qrcodename:qrcodeparam,
+                //         data:result,
+                //       ranking:ranking
+                //     })    
+                    // })
+                    // return res.status(200).json({
+                    //        data:result,
+                    //        ranking:ranking
+                    //    })
+                   })
+    }) 
+
+
+})
+}
