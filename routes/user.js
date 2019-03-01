@@ -18,5 +18,6 @@ router.post('/gethuntcategory',reedemcards.getuserhuntcategory)
 router.post('/loginactive',UsersController.loginactive)
 router.post('/update_signup',UsersController.update)
 router.post('/deleteaccount',UsersController.deleteaccount)
+router.post('/homedetail',UsersController.homedetail)
 
 module.exports = router;
