@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 var helpers = require('../middleware/common-function');
-
+var qrcodegenrator=require('../../models/qrcodegenerator')
+const Reedemcard=require('../models/reedemcard');
+const Places=require('../../models/qrcodegenerator');
 //const xoauth2 = require('xoauth2');
 
 exports.user_signup = (req,res,next) => {
